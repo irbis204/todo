@@ -1,0 +1,73 @@
+.button {
+  min-width: 35px;
+  min-height: 35px;
+  color: white;
+  font-size: 20pt;
+  border-radius: 20px;
+  border: 0px;
+  margin: 10px 10px 10px 10px; }
+  .button-close {
+    min-width: 20px;
+    max-width: 20px;
+    min-height: 20px;
+    max-height: 20px;
+    background-color: lightgray;
+    border: 0px;
+    border-radius: 10px;
+    color: gray;
+    margin: 5px 5px 5px 5px; }
+
+.button-close:hover {
+  background-color: #D75C5D;
+  color: white; }
+
+.option {
+  margin: 0 0 0 auto;
+  display: block;
+  max-width: 60px; }
+
+.add {
+  background-color: #63cc27; }
+
+.search {
+  background-color: #d14e45; }
+
+.sort {
+  background-color: #eddd4a; }
+
+.input {
+  border: 0px;
+  border-bottom: 1px solid lightgray;
+  min-height: 25px;
+  position: relative;
+  top: -5px;
+  margin: 10px; }
+
+.text {
+  margin: 10px; }
+
+.hide {
+  display: none; }
+
+.test {
+  min-width: 15px;
+  min-height: 15px;
+  max-width: 15px;
+  margin: auto; }
+
+.listBlock {
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  max-width: 700px;
+  padding: 10px 10px 10px 10px; }
+
+.case {
+  min-height: 100px;
+  max-width: 600px;
+  min-width: 600px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  border-radius: 20px;
+  margin: 10px auto 0 auto;
+  padding: 5px; }
+
+/*# sourceMappingURL=style.css.map */
