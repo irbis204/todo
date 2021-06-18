@@ -1,59 +1,107 @@
-import {addChild, createElement} from "./function";
+import { addChild, createElement } from "./function";
 import {Application} from "./Application";
+import {category} from "./category";
 
 export let UI = {
-    listOfCategoriesBlock:{
-        container: createElement({type:'div', className: ['listBlock']}),
-        optionBlock:{
-            container: createElement({type:'div', className: ['optionBlock']}),
-            addButton: createElement({type:'button', className: ['button', 'add'], text: '+'}),
-            searchButton: createElement({type:'button', className: ['button', 'search']}),
-            sortButton: createElement({type:'button', className: ['button', 'sort'], text: '\u21F5'}),
-            input: createElement({type: 'input', className: ['input', 'hide']}),
-            renderInput: (i) => {
-                UI.listOfCategoriesBlock.optionBlock.input.classList.remove('hide');
-                UI.listOfCategoriesBlock.optionBlock.container.remove();
-                UI.listOfCategoriesBlock.optionBlock.container = createElement({type:'div', className: ['optionBlock']});
-                if(i==0){
-                    addChild(UI.listOfCategoriesBlock.optionBlock.container, [UI.listOfCategoriesBlock.optionBlock.input, UI.listOfCategoriesBlock.optionBlock.addButton, UI.listOfCategoriesBlock.optionBlock.searchButton, UI.listOfCategoriesBlock.optionBlock.sortButton]);
-                } else if(i==1){
-                    addChild(UI.listOfCategoriesBlock.optionBlock.container, [UI.listOfCategoriesBlock.optionBlock.addButton, UI.listOfCategoriesBlock.optionBlock.input, UI.listOfCategoriesBlock.optionBlock.searchButton, UI.listOfCategoriesBlock.optionBlock.sortButton]);
-                } else if(i==2){
-                    UI.listOfCategoriesBlock.optionBlock.input.classList.add('hide');
-                    addChild(UI.listOfCategoriesBlock.optionBlock.container, [UI.listOfCategoriesBlock.optionBlock.addButton, UI.listOfCategoriesBlock.optionBlock.searchButton, UI.listOfCategoriesBlock.optionBlock.input, UI.listOfCategoriesBlock.optionBlock.sortButton]);
-                }
-
-                UI.listOfCategoriesBlock.container.insertAdjacentElement('afterbegin', UI.listOfCategoriesBlock.optionBlock.container);
-            },
-        },
-        list: createElement({type:'div', className: ['optionBlock']}),
+  listOfCategories: {
+    container: createElement({ type: "div", className: ['listOfCategories']}),
+    optionBlock: {
+      container: createElement({ type: "div" }),
+      addOption: createElement({ type: "button", className: ["button", "button-add"], text:"+"}),
+      addOptionBox: createElement({ type: "div", className: ["optionBox"] }),
+      searchOption: createElement({ type: "button", className: ["button", "button-search"]}),
+      searchOptionBox: createElement({ type: "div",  className: ["optionBox"] }),
+      sortButton: createElement({
+        type: "button",
+        className: ["button", "button-sort"],
+        text: "\u21F5",
+      }),
+      option: {
+        container: createElement({ type: "div", className: ["option", "hide"]}),
+        input: createElement({type: "input", className: ["input"]}),
+        addButton: createElement({
+          type: "button",
+          className: ["button", "button-add", "hide"],
+          text: "+",
+        }),
+        searchButton: createElement({
+          type: "button",
+          className: ["button", "button-search", "hide"],
+        }),
+      }
     },
+    list: createElement({ type: "div" }),
+  },
+  listOfCases: {
+    container: createElement({ type: "div", className: ['listOfCases']}),
+    optionBlock: {
+      container: createElement({ type: "div" }),
+      addOption: createElement({ type: "button", className: ["button", "button-add"], text:"+"}),
+      addOptionBox: createElement({ type: "div", className: ["optionBox"] }),
+      searchOption: createElement({ type: "button", className: ["button", "button-search"]}),
+      searchOptionBox: createElement({ type: "div",  className: ["optionBox"] }),
+      sortButton: createElement({
+        type: "button",
+        className: ["button", "button-sort"],
+        text: "\u21F5",
+      }),
+      option: {
+        container: createElement({ type: "div", className: ["option", "hide"]}),
+        input: createElement({type: "input", className: ["input"]}),
+        addButton: createElement({
+          type: "button",
+          className: ["button", "button-add", "hide"],
+          text: "+",
+        }),
+        searchButton: createElement({
+          type: "button",
+          className: ["button", "button-search", "hide"],
+        }),
+      }
+    },
+    list: createElement({ type: "div" }),
+  },
+  caseItem: createElement({ type: "div", className: ['caseItem'] }),
+  clearBlock(block) {
+    let size = block.children.length;
+    console.log(block.children[0]);
 
+    for(let i=0; i < size; i++){
+      console.log(block.children[0]);
+      block.children[0].remove();
+    }
+  },
+}
+
+UI.listOfCategories.optionBlock.addOption.onclick = () => {
+  UI.listOfCategories.optionBlock.option.container.className = "option"
+  UI.listOfCategories.optionBlock.option.addButton.classList.remove("hide");
+  UI.listOfCategories.optionBlock.option.searchButton.classList.add("hide");
 };
-let inputIndex = -1;
-UI.listOfCategoriesBlock.optionBlock.addButton.onclick = () =>{
-    if (inputIndex !== 0){
-        UI.listOfCategoriesBlock.optionBlock.renderInput(0);
 
-        inputIndex = 0;
-    } else {
-        Application.add();
-    }
-}
-UI.listOfCategoriesBlock.optionBlock.searchButton.onclick = () => {
-    if (inputIndex !== 1){
-        UI.listOfCategoriesBlock.optionBlock.renderInput(1);
-        inputIndex = 1;
-    } else {
-        Application.add();
-    }
-}
+UI.listOfCategories.optionBlock.searchOption.onclick = () => {
+  UI.listOfCategories.optionBlock.option.container.className = "option"
+  UI.listOfCategories.optionBlock.option.searchButton.classList.remove("hide");
+  UI.listOfCategories.optionBlock.option.addButton.classList.add("hide");
+};
 
-UI.listOfCategoriesBlock.optionBlock.sortButton.onclick = () => {
-    if (inputIndex !== 2){
-        UI.listOfCategoriesBlock.optionBlock.renderInput(2);
-        inputIndex = 2;
-    } else {
-        Application.add();
-    }
-}
+UI.listOfCategories.optionBlock.sortButton.onclick = () => {
+  UI.listOfCategories.optionBlock.option.container.classList.add("hide");
+};
+UI.listOfCategories.optionBlock.option.addButton.onclick = () => Application.add();
+
+UI.listOfCases.optionBlock.addOption.onclick = () => {
+  UI.listOfCases.optionBlock.option.container.className = "option"
+  UI.listOfCases.optionBlock.option.addButton.classList.remove("hide");
+  UI.listOfCases.optionBlock.option.searchButton.classList.add("hide");
+};
+
+UI.listOfCases.optionBlock.searchOption.onclick = () => {
+  UI.listOfCases.optionBlock.option.container.className = "option"
+  UI.listOfCases.optionBlock.option.searchButton.classList.remove("hide");
+  UI.listOfCases.optionBlock.option.addButton.classList.add("hide");
+};
+
+UI.listOfCases.optionBlock.sortButton.onclick = () => {
+  UI.listOfCases.optionBlock.option.container.classList.add("hide");
+};

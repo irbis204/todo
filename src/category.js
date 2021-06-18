@@ -1,48 +1,83 @@
-import {addChild, createElement} from "./function";
-import {UI} from "./UI";
+import { addChild, createElement, formatDate } from "./function";
+import { UI } from "./UI";
+import {newCase} from "./caseItem";
 
-let category = {
-    text: '',
-    HTMLItem: 0,
-    cases: [],
-    sorted: 1,
-    add:function (existingCategory){
-        let body;
-        let tempDate;
-        let tempText;
-        if(existingCategory) {
-            tempDate = existingCategory.date;
-            tempText = existingCategory.text;
-        } else {
-            tempDate = new Date();
-            tempText = UI.listOfCategoriesBlock.optionBlock.input.value;
-            this.categories.push(newCategory({
-                text: tempText,
-                HTMLItem: body,
+export let category = {
+  text: "",
+  HTMLItem: 0,
+  cases: [],
+  sorted: 1,
+  add(existingCase) {
+    let caseHtml = {
+      body: createElement({ type: "div", className: ["category"] }),
+      text: "",
+      date: "",
+      deleteButton: createElement({
+        type: "button",
+        className: ["button-category"],
+        text: "\u00D7",
+      }),
+    };
+    let tempText;
+    let tempDate = new Date();
 
-            }))
-        }
+    if (existingCase) {
+      tempText = existingCase.text;
+      tempDate = new Date(existingCase.date);
+      console.log(existingCase)
+      console.log(tempDate);
+    } else if (UI.listOfCases.optionBlock.option.input.value !== "") {
+      tempText = UI.listOfCases.optionBlock.option.input.value;
 
-        body = createElement({type:'div', className:''});
-        let text = createElement({type:'h5', text: tempText});
-        let date = createElement({type:'h5', text: tempDate});
-        let closeButton = createElement({type:'button'});
-        let editButton = createElement({type:'button'});
+      this.cases.push(
+        new newCase({
+          text: tempText,
+          HTMLItem: caseHtml.body,
+          date: tempDate.getTime(),
+        })
+      );
+    } else {
+      alert("Please, enter text.");
 
-        addChild(body, [text, date, closeButton, editButton]);
-        addChild(UI.listOfCategoriesBlock,[list]);
-    },
+      return;
+    }
+
+
+    caseHtml.body.onclick = () => {
+      //I.listOfCases.optionBlock.option.addButton.onclick = () => this.categories[this.categories.length].add();
+    };
+    caseHtml.deleteButton.onclick = () => category.delete(tempText);
+
+    caseHtml.text = createElement({
+      type: "h3",
+      className: ["text"],
+      text: tempText,
+    });
+    caseHtml.date = createElement({
+      type: "h3",
+      className: ["text"],
+      text: formatDate(tempDate),
+    });
+
+    addChild(caseHtml.body, [
+      caseHtml.text,
+      caseHtml.date,
+      caseHtml.deleteButton,
+    ]);
+    addChild(UI.listOfCases.list, [ caseHtml.body ])
+  },
+  delete() {
+
+  }
 };
 
-export function newCategory(category){
-    this.text = category.text ? category.text : '';
-    this.HTMLItem = category.HTMLItem;
-    this.cases = [];
-    this.sorted = 1;
-    return this;
+export function newCategory(category) {
+  this.text = category.text ? category.text : "";
+  this.HTMLItem = category.HTMLItem;
+  this.cases = [];
+  this.sorted = 1;
+
+  return this;
 }
 
 newCategory.prototype = category;
-
-
-

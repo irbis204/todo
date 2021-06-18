@@ -1,55 +1,76 @@
-import {addChild, createElement} from "./function";
-import {UI} from "./UI";
-import {newCategory} from "./category";
+import { addChild, createElement } from "./function";
+import { UI } from "./UI";
+import {category, newCategory} from "./category";
 
 export let Application = {
-    categories:[],
-    sorted: 1,
-    HTMLItem: 0,
-    upload: false,
-    add:function (existingCategory){
-        let categoryHtml = {
-            body: createElement({type:'div', className:['case']}),
-            text: '',
-            options: {
-                container: createElement({type:'div', className:['option']}),
-                deleteButton: createElement({type:'button', className:['button-close'], text: '\u00D7'}),
-                editButton: createElement({type:'button', className:['button-close'],  text: '\u270E'}),
-            },
-        }
-        let tempText;
-        if(existingCategory) {
-            tempText = existingCategory.text;
-        } else {
-            tempText = UI.listOfCategoriesBlock.optionBlock.input.value;
-            console.log(new newCategory({
-                text: tempText,
-                HTMLItem: categoryHtml.body,
-            }));
-            this.categories.push(new newCategory({
-                text: tempText,
-                HTMLItem: categoryHtml.body,
-            }));
-        }
+  categories: [],
+  sorted: 1,
+  HTMLItem: 0,
+  upload: false,
 
-        categoryHtml.text = createElement({type:'h3', className:['text'], text: tempText});
-        categoryHtml.options.deleteButton.onclick = () => Application.delete(tempText);
+  add(existingCategory) {
+    let categoryHtml = {
+      body: createElement({ type: "div", className: ["category"] }),
+      text: "",
+      deleteButton: createElement({
+        type: "button",
+        className: ["button-category"],
+        text: "\u00D7",
+      }),
+    };
+    let tempText;
+    let tempCategory;
 
+    if (existingCategory) {
+      tempCategory = existingCategory;
+      tempText = existingCategory.text;
+    } else if (UI.listOfCategories.optionBlock.option.input.value !== "") {
+      tempText = UI.listOfCategories.optionBlock.option.input.value;
+      tempCategory = new newCategory({
+        text: tempText,
+        HTMLItem: categoryHtml.body,
+      });
 
-        addChild(categoryHtml.options.container, [categoryHtml.options.editButton, categoryHtml.options.deleteButton]);
-        addChild(categoryHtml.body, [categoryHtml.options.container, categoryHtml.text]);
-        addChild(UI.listOfCategoriesBlock.list,[categoryHtml.body]);
+      this.categories.push(tempCategory);
+    } else {
+      alert("Please, enter text.");
 
-    },
-    delete: function(text) {
-        Application.categories = Application.categories.filter((item) => {
-            if(item.text === text){
-                item.HTMLItem.remove();
-                text = undefined;
-                return false;
-            }
+      return;
+    }
 
-            return true;
-        });
-    },
+    categoryHtml.body.onclick = () => {
+      UI.clearBlock(UI.listOfCases.list);
+
+      tempCategory.cases.forEach((item) => {
+        category.add(item);
+      });
+      UI.listOfCases.optionBlock.option.addButton.onclick = () => tempCategory.add();
+    };
+    categoryHtml.deleteButton.onclick = () => Application.delete(tempText);
+
+    categoryHtml.text = createElement({
+      type: "h3",
+      className: ["text"],
+      text: tempText,
+    });
+
+   addChild(categoryHtml.body, [
+     categoryHtml.text,
+     categoryHtml.deleteButton
+   ]);
+   addChild(UI.listOfCategories.list, [ categoryHtml.body ])
+  },
+
+  delete(text) {
+    Application.categories = Application.categories.filter((item) => {
+      if (item.text === text) {
+        item.HTMLItem.remove();
+        text = undefined;
+
+        return false;
+      }
+
+      return true;
+    });
+  },
 };
