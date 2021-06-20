@@ -1,4 +1,4 @@
-import { addChild, createElement } from "./function";
+import { addChild, createElement, changeText} from "./function";
 import { UI } from "./UI";
 import {category, newCategory} from "./category";
 
@@ -8,6 +8,7 @@ export let Application = {
   HTMLItem: 0,
   upload: false,
   selectedCategory: 0,
+  selectedCase: 0,
 
   add(existingCategory) {
     let categoryHtml = {
@@ -48,7 +49,7 @@ export let Application = {
         if(Application.selectedCategory.text === tempCategory.text){
           Application.selectedCategory = 0;
 
-          UI.listOfCategories.optionBlock.option.addButton.onclick = () => {return};
+          UI.listOfCases.optionBlock.option.addButton.onclick = () => {return};
 
           return;
         }
@@ -59,6 +60,7 @@ export let Application = {
       });
 
       UI.listOfCases.optionBlock.option.addButton.onclick = () => tempCategory.add();
+      categoryHtml.text.ondblclick = () => changeText(tempCategory, 'Categories');
       Application.selectedCategory = tempCategory;
       Application.selectedCategory.HTMLItem.classList.add("category-active");
     };
@@ -75,6 +77,8 @@ export let Application = {
      categoryHtml.deleteButton
    ]);
    addChild(UI.listOfCategories.list, [ categoryHtml.body ])
+
+    UI.listOfCases.optionBlock.option.addButton.onclick = () => {return};
   },
 
   delete(text) {

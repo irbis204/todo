@@ -107,13 +107,17 @@ body {
   margin: 5px;
 }
 
-input {
+.input {
   max-width: 60%;
   border: 0px;
   border-bottom: 1px solid lightgray;
   min-height: 30px;
   top: -5px;
   position: relative;
+  &-change {
+    background-color: lightgray;
+    border-bottom: 1px gray solid;
+  }
 }
 
 .category {
@@ -136,7 +140,7 @@ input {
   }
 }
 
-.case{
+.case {
   border-radius: 5px;
   margin: 5px;
   &-active {
@@ -199,3 +203,15 @@ input {
   margin: auto;
 }
 
+.changeBlock {
+  margin: 5px 5px 0 5px;
+  display: inline-block;
+  max-width: 75%;
+}
+
+.image {
+  min-width: 300px;
+  max-width: 300 px;
+  min-height: 250px;
+  min-height: 250px;
+}

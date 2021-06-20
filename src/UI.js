@@ -30,6 +30,11 @@ export let UI = {
           className: ["button", "button-search", "hide"],
         }),
       },
+      changeTextBlock: {
+        container: createElement({ type: "div", className: ["changeBlock"] }),
+        input: createElement({type: "input", className: ["input", "input-change"]}),
+        button: createElement({type: "button", className: ["button-category-close"], text: "\u2713"}),
+      },
     },
     list: createElement({ type: "div" }),
     selectedCategory: 0,
@@ -69,7 +74,12 @@ export let UI = {
           className: ["button", "button-sort", "button-sortBy", "hide"],
           text: "Sort by date",
         }),
-      }
+      },
+      changeTextBlock: {
+        container: createElement({ type: "div", className: ["changeBlock"] }),
+        input: createElement({type: "input", className: ["input", "input-change"]}),
+        button: createElement({type: "button", className: ["button-category-close"], text: "\u2713"}),
+      },
     },
     list: createElement({ type: "div" }),
     selectedCase: 0,
@@ -78,6 +88,10 @@ export let UI = {
     container: createElement({ type: "div", className: ['caseItem'] }),
     titel: createElement({ type: "h3" }),
     text: createElement({ type: "h2" }),
+    dropImage: {
+      container: createElement({type: 'div', text: "drop to me"}),
+      input: createElement({type: 'input', className: ['hide']}),
+    },
     galery: createElement({ type: "div" }),
   },
 

@@ -80,11 +80,24 @@ addChild(UI.listOfCases.container, [
   UI.listOfCases.list,
 ]);
 
+addChild(UI.caseItem.dropImage.container, [
+  UI.caseItem.dropImage.input
+])
 addChild(UI.caseItem.container, [
   UI.caseItem.titel,
   UI.caseItem.text,
+  UI.caseItem.dropImage.container,
   UI.caseItem.galery
 ]);
+
+addChild(UI.listOfCategories.optionBlock.changeTextBlock.container, [
+  UI.listOfCategories.optionBlock.changeTextBlock.input,
+  UI.listOfCategories.optionBlock.changeTextBlock.button
+])
+addChild(UI.listOfCases.optionBlock.changeTextBlock.container, [
+  UI.listOfCases.optionBlock.changeTextBlock.input,
+  UI.listOfCases.optionBlock.changeTextBlock.button
+])
 
 document.body.appendChild(UI.listOfCategories.container);
 document.body.appendChild(UI.listOfCases.container);
