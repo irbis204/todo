@@ -39,7 +39,7 @@ body {
     background-color: #d14e45; }
   .button-sort {
     background-color: #eddd4a; }
-  .button-category {
+  .button-category-close {
     display: inline-block;
     min-width: 20px;
     max-width: 20px;
@@ -50,9 +50,29 @@ body {
     border-radius: 10px;
     color: gray;
     margin: 5px 5px 5px 5px; }
-  .button-category:hover {
+  .button-category-close:hover {
     background-color: #D75C5D !important;
     color: white; }
+  .button-case-close {
+    display: inline-block;
+    min-width: 20px;
+    max-width: 20px;
+    min-height: 20px;
+    max-height: 20px;
+    background-color: lightgray;
+    border: 0px;
+    border-radius: 10px;
+    color: gray;
+    margin: 5px 5px 5px 5px;
+    position: relative;
+    top: 50%;
+    transform: translate(0, -80%); }
+  .button-case-close:hover {
+    background-color: #D75C5D !important;
+    color: white; }
+  .button-sortBy {
+    min-width: 60px;
+    font-size: 10pt; }
 
 .optionBox {
   display: inline-block; }
@@ -77,12 +97,38 @@ input {
 .category {
   border-radius: 5px;
   margin: 5px; }
+  .category-active {
+    background-color: lightgray; }
+    .category-active :nth-child(2n) {
+      color: white;
+      background-color: gray; }
 
 .category:hover {
   background-color: lightgray; }
   .category:hover :nth-child(2n) {
     color: white;
     background-color: gray; }
+
+.case {
+  border-radius: 5px;
+  margin: 5px; }
+  .case-active {
+    background-color: lightgray; }
+    .case-active :nth-child(2n) {
+      color: white;
+      background-color: gray; }
+    .case-active :nth-child(1n) :nth-child(2n) {
+      color: gray;
+      background-color: initial; }
+
+.case:hover {
+  background-color: lightgray; }
+  .case:hover :nth-child(2n) {
+    color: white;
+    background-color: gray; }
+  .case:hover :nth-child(1n) :nth-child(2n) {
+    color: gray;
+    background-color: initial; }
 
 .categoryOptions {
   display: inline-block;
@@ -93,6 +139,15 @@ input {
   display: inline-block;
   margin: 5px 5px 5px 10px;
   min-width: 70%; }
+
+.date {
+  color: gray;
+  display: inline-block;
+  margin: 5px 5px 5px 10px; }
+
+.caseInfo {
+  display: inline-block;
+  min-width: 85%; }
 
 .img {
   border: 0px;
