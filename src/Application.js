@@ -7,6 +7,7 @@ export let Application = {
   sorted: 1,
   HTMLItem: 0,
   upload: false,
+  selectedCategory: 0,
 
   add(existingCategory) {
     let categoryHtml = {
@@ -14,7 +15,7 @@ export let Application = {
       text: "",
       deleteButton: createElement({
         type: "button",
-        className: ["button-category"],
+        className: ["button-category-close"],
         text: "\u00D7",
       }),
     };
@@ -41,10 +42,25 @@ export let Application = {
     categoryHtml.body.onclick = () => {
       UI.clearBlock(UI.listOfCases.list);
 
+      if(Application.selectedCategory !== 0) {
+        Application.selectedCategory.HTMLItem.classList.remove("category-active");
+
+        if(Application.selectedCategory.text === tempCategory.text){
+          Application.selectedCategory = 0;
+
+          UI.listOfCategories.optionBlock.option.addButton.onclick = () => {return};
+
+          return;
+        }
+      }
+
       tempCategory.cases.forEach((item) => {
         category.add(item);
       });
+
       UI.listOfCases.optionBlock.option.addButton.onclick = () => tempCategory.add();
+      Application.selectedCategory = tempCategory;
+      Application.selectedCategory.HTMLItem.classList.add("category-active");
     };
     categoryHtml.deleteButton.onclick = () => Application.delete(tempText);
 

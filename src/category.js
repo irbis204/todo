@@ -9,33 +9,39 @@ export let category = {
   sorted: 1,
   add(existingCase) {
     let caseHtml = {
-      body: createElement({ type: "div", className: ["category"] }),
-      text: "",
-      date: "",
+      body: createElement({
+        type: "div",
+        className: ["case"] }),
+      infoBlock: {
+        container: createElement({
+          type: "div",
+          className: ["caseInfo"] }),
+        text: "",
+        date: "",
+      },
       deleteButton: createElement({
         type: "button",
-        className: ["button-category"],
+        className: ["button-case-close"],
         text: "\u00D7",
       }),
     };
     let tempText;
     let tempDate = new Date();
+    let tempCase;
 
     if (existingCase) {
       tempText = existingCase.text;
       tempDate = new Date(existingCase.date);
-      console.log(existingCase)
-      console.log(tempDate);
+      tempCase = existingCase;
     } else if (UI.listOfCases.optionBlock.option.input.value !== "") {
       tempText = UI.listOfCases.optionBlock.option.input.value;
+      tempCase = new newCase({
+        text: tempText,
+        HTMLItem: caseHtml.body,
+        date: tempDate.getTime(),
+      })
 
-      this.cases.push(
-        new newCase({
-          text: tempText,
-          HTMLItem: caseHtml.body,
-          date: tempDate.getTime(),
-        })
-      );
+      this.cases.push(tempCase);
     } else {
       alert("Please, enter text.");
 
@@ -44,25 +50,44 @@ export let category = {
 
 
     caseHtml.body.onclick = () => {
-      //I.listOfCases.optionBlock.option.addButton.onclick = () => this.categories[this.categories.length].add();
+      //UI.clearBlock(UI.caseItem.container);
+
+      if(UI.listOfCases.selectedCase !== 0) {
+        UI.listOfCases.selectedCase.classList.remove("case-active");
+      }
+
+      if(UI.listOfCases.selectedCase === tempCase.HTMLItem){
+        UI.listOfCases.selectedCase = 0;
+
+        UI.listOfCases.optionBlock.option.addButton.onclick = () => {return};
+
+        return;
+      }
+
+      tempCase.show();
+      UI.listOfCases.selectedCase = tempCase.HTMLItem;
+      UI.listOfCases.selectedCase.classList.add("case-active");
     };
     caseHtml.deleteButton.onclick = () => category.delete(tempText);
 
-    caseHtml.text = createElement({
+    caseHtml.infoBlock.text = createElement({
       type: "h3",
       className: ["text"],
       text: tempText,
     });
-    caseHtml.date = createElement({
-      type: "h3",
-      className: ["text"],
+    caseHtml.infoBlock.date = createElement({
+      type: "h5",
+      className: ["date"],
       text: formatDate(tempDate),
     });
 
+    addChild(caseHtml.infoBlock.container, [
+      caseHtml.infoBlock.text,
+      caseHtml.infoBlock.date
+    ]);
     addChild(caseHtml.body, [
-      caseHtml.text,
-      caseHtml.date,
-      caseHtml.deleteButton,
+      caseHtml.infoBlock.container,
+      caseHtml.deleteButton
     ]);
     addChild(UI.listOfCases.list, [ caseHtml.body ])
   },
@@ -73,7 +98,7 @@ export let category = {
 
 export function newCategory(category) {
   this.text = category.text ? category.text : "";
-  this.HTMLItem = category.HTMLItem;
+  this.HTMLItem = category.HTMLItem ? category.HTMLItem : 0;
   this.cases = [];
   this.sorted = 1;
 
