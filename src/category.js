@@ -1,6 +1,7 @@
-import { addChild, createElement, formatDate } from "./function";
+import {addChild, changeText, createElement, formatDate} from "./function";
 import { UI } from "./UI";
 import {newCase} from "./caseItem";
+import {Application} from "./Application";
 
 export let category = {
   text: "",
@@ -30,6 +31,7 @@ export let category = {
     let tempCase;
 
     if (existingCase) {
+      existingCase.HTMLItem = caseHtml.body;
       tempText = existingCase.text;
       tempDate = new Date(existingCase.date);
       tempCase = existingCase;
@@ -52,24 +54,23 @@ export let category = {
     caseHtml.body.onclick = () => {
       //UI.clearBlock(UI.caseItem.container);
 
-      if(UI.listOfCases.selectedCase !== 0) {
-        UI.listOfCases.selectedCase.classList.remove("case-active");
-      }
+      if(Application.selectedCase !== 0) {
+        Application.selectedCase.HTMLItem.classList.remove("case-active");
 
-      if(UI.listOfCases.selectedCase === tempCase.HTMLItem){
-        UI.listOfCases.selectedCase = 0;
+        if (Application.selectedCase.text === tempCase.text) {
+          Application.selectedCase = 0;
 
-        UI.listOfCases.optionBlock.option.addButton.onclick = () => {return};
-
-        return;
+          return;
+        }
       }
 
       tempCase.show();
-      UI.listOfCases.selectedCase = tempCase.HTMLItem;
-      UI.listOfCases.selectedCase.classList.add("case-active");
+      Application.selectedCase = tempCase;
+      console.log(Application.selectedCase)
+      caseHtml.body.classList.add("case-active");
+      console.log(Application.selectedCase.HTMLItem);
     };
     caseHtml.deleteButton.onclick = () => category.delete(tempText);
-
     caseHtml.infoBlock.text = createElement({
       type: "h3",
       className: ["text"],
@@ -81,6 +82,8 @@ export let category = {
       text: formatDate(tempDate),
     });
 
+    caseHtml.infoBlock.text.ondblclick = () => changeText(tempCase, 'Cases');
+
     addChild(caseHtml.infoBlock.container, [
       caseHtml.infoBlock.text,
       caseHtml.infoBlock.date
@@ -91,8 +94,17 @@ export let category = {
     ]);
     addChild(UI.listOfCases.list, [ caseHtml.body ])
   },
-  delete() {
+  delete(text) {
+    Application.selectedCategory.cases = Application.selectedCategory.cases.filter((item) => {
+      if (item.text === text) {
+        item.HTMLItem.remove();
+        text = undefined;
 
+        return false;
+      }
+
+      return true;
+    });
   }
 };
 
