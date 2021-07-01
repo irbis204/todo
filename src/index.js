@@ -1,106 +1,101 @@
-import { addChild, createElement } from "./function";
-import { UI } from "./UI";
+import {addChild, changeText, createElement, getStorage} from './function';
+import { UI } from './UI';
+import {Application} from "./Application";
 
-
-let searchIcon = createElement({ type: "div" });
+let searchIcon = createElement({ type: 'div' });
 searchIcon.setAttribute(
-  "style",
-  `background:url('./img/search.png') no-repeat center; background-size:contain; filter: invert(100%);`
+  'style',
+  `background:url('./img/search.png') no-repeat center; background-size:contain; filter: invert(80%);`
 );
-searchIcon.classList.add("img");
-//UI.listOfCategoriesBlock.optionBlock.searchButton
-
-let searchIcon2 = createElement({ type: "div" });
-searchIcon2.setAttribute(
-  "style",
-  `background:url('./img/search.png') no-repeat center; background-size:contain; filter: invert(100%);`
-);
-searchIcon2.classList.add("img");
-
-let searchIcon3 = createElement({ type: "div" });
-searchIcon3.setAttribute(
-  "style",
-  `background:url('./img/search.png') no-repeat center; background-size:contain; filter: invert(100%);`
-);
-searchIcon3.classList.add("img");
-//UI.listOfCategoriesBlock.optionBlock.searchButton
-
-let searchIcon4 = createElement({ type: "div" });
-searchIcon4.setAttribute(
-  "style",
-  `background:url('./img/search.png') no-repeat center; background-size:contain; filter: invert(100%);`
-);
-searchIcon4.classList.add("img");
-
-addChild(UI.listOfCategories.optionBlock.searchOption, [searchIcon]);
-addChild(UI.listOfCategories.optionBlock.option.searchButton, [searchIcon2]);
-
-addChild(UI.listOfCases.optionBlock.searchOption, [searchIcon3]);
-addChild(UI.listOfCases.optionBlock.option.searchButton, [searchIcon4]);
-
-addChild(UI.listOfCategories.optionBlock.option.container, [
-  UI.listOfCategories.optionBlock.option.input,
-  UI.listOfCategories.optionBlock.option.addButton,
-  UI.listOfCategories.optionBlock.option.searchButton
-]);
-addChild(UI.listOfCategories.optionBlock.sortOptionBox, [
-  UI.listOfCategories.optionBlock.sortButton]);
-addChild(UI.listOfCategories.optionBlock.addOptionBox, [UI.listOfCategories.optionBlock.addOption]);
-addChild(UI.listOfCategories.optionBlock.searchOptionBox, [UI.listOfCategories.optionBlock.searchOption]);
-addChild(UI.listOfCategories.optionBlock.container, [
-  UI.listOfCategories.optionBlock.addOptionBox,
-  UI.listOfCategories.optionBlock.searchOptionBox,
-  UI.listOfCategories.optionBlock.sortOptionBox,
-  UI.listOfCategories.optionBlock.option.container
-]);
-addChild(UI.listOfCategories.container, [
-  UI.listOfCategories.optionBlock.container,
-  UI.listOfCategories.list,
-]);
-
-addChild(UI.listOfCases.optionBlock.option.container, [
-  UI.listOfCases.optionBlock.option.input,
-  UI.listOfCases.optionBlock.option.addButton,
-  UI.listOfCases.optionBlock.option.searchButton,
-  UI.listOfCases.optionBlock.option.sortByTextButton,
-  UI.listOfCases.optionBlock.option.sortByDateButton
-]);
-addChild(UI.listOfCases.optionBlock.addOptionBox, [
-  UI.listOfCases.optionBlock.addOption]);
-addChild(UI.listOfCases.optionBlock.searchOptionBox, [
-  UI.listOfCases.optionBlock.searchOption]);
-addChild(UI.listOfCases.optionBlock.container, [
-  UI.listOfCases.optionBlock.addOptionBox,
-  UI.listOfCases.optionBlock.searchOptionBox,
-  UI.listOfCases.optionBlock.sortButton,
-  UI.listOfCases.optionBlock.option.container
-]);
-addChild(UI.listOfCases.container, [
-  UI.listOfCases.optionBlock.container,
-  UI.listOfCases.list,
-]);
-
-addChild(UI.caseItem.dropImage.container, [
-  UI.caseItem.dropImage.input
-])
-addChild(UI.caseItem.container, [
-  UI.caseItem.titel,
-  UI.caseItem.text,
-  UI.caseItem.dropImage.container,
-  UI.caseItem.galery
-]);
-
-addChild(UI.listOfCategories.optionBlock.changeTextBlock.container, [
-  UI.listOfCategories.optionBlock.changeTextBlock.input,
-  UI.listOfCategories.optionBlock.changeTextBlock.button
-])
-addChild(UI.listOfCases.optionBlock.changeTextBlock.container, [
-  UI.listOfCases.optionBlock.changeTextBlock.input,
-  UI.listOfCases.optionBlock.changeTextBlock.button
+searchIcon.classList.add('img');
+addChild(UI.listBlock.listOfCategories.optionBlock.searchBlock.button, [
+  searchIcon
 ])
 
-document.body.appendChild(UI.listOfCategories.container);
-document.body.appendChild(UI.listOfCases.container);
-document.body.appendChild(UI.caseItem.container);
+UI.popUp.body.inputName.placeholder = 'Enter name...';
+UI.popUp.body.inputText.placeholder = 'Enter text...';
 
-//UI.listOfCategories.optionBlock.searchButton.appendChild(searchIcon);
+addChild(UI.listBlock.container, [
+  UI.listBlock.listOfCategories.container,
+  UI.listBlock.listOfCases.container,
+  UI.listBlock.caseItem.container
+]);
+// listOfCategories
+addChild(UI.listBlock.listOfCategories.container, [
+  UI.listBlock.listOfCategories.optionBlock.container,
+  UI.listBlock.listOfCategories.content.container
+]);
+
+addChild(UI.listBlock.listOfCategories.content.container, [
+  UI.listBlock.listOfCategories.content.countCategories,
+  UI.listBlock.listOfCategories.content.list,
+  UI.listBlock.listOfCategories.content.addButton
+]);
+
+addChild(UI.listBlock.listOfCategories.optionBlock.container, [
+  UI.listBlock.listOfCategories.optionBlock.searchBlock.container,
+  UI.listBlock.listOfCategories.optionBlock.sortButton
+]);
+
+addChild(UI.listBlock.listOfCategories.optionBlock.searchBlock.container, [
+  UI.listBlock.listOfCategories.optionBlock.searchBlock.input,
+  UI.listBlock.listOfCategories.optionBlock.searchBlock.button,
+]);
+// listOfCases
+addChild(UI.listBlock.listOfCases.content.container, [
+  UI.listBlock.listOfCases.content.countCases,
+  UI.listBlock.listOfCases.content.list,
+  UI.listBlock.listOfCases.content.addButton
+]);
+
+addChild(UI.listBlock.listOfCases.container, [
+  UI.listBlock.listOfCases.optionBlock.container,
+  UI.listBlock.listOfCases.content.container
+]);
+
+addChild(UI.listBlock.listOfCases.optionBlock.container, [
+  UI.listBlock.listOfCases.optionBlock.sortByTextButton,
+  UI.listBlock.listOfCases.optionBlock.sortByDateButton
+]);
+//caseItem
+addChild(UI.listBlock.caseItem.dropImage.container, [
+  UI.listBlock.caseItem.dropImage.input
+]);
+
+addChild(UI.popUp.body.container, [
+  UI.popUp.body.inputName,
+  UI.popUp.body.inputText,
+  UI.popUp.body.button
+]);
+
+addChild(UI.popUp.form,[
+  UI.popUp.title,
+  UI.popUp.body.container,
+  UI.popUp.closeButton
+]);
+
+addChild(UI.popUp.container, [
+  UI.popUp.form
+]);
+
+addChild(UI.categorySelector.container, [
+  UI.categorySelector.option.container
+]);
+
+addChild(UI.categorySelector.option.container, [
+  UI.categorySelector.option.renameButton,
+  UI.categorySelector.option.deleteButton
+]);
+
+addChild(UI.caseSelector.container, [
+  UI.caseSelector.option.container
+]);
+
+addChild(UI.caseSelector.option.container, [
+  UI.caseSelector.option.renameButton,
+  UI.caseSelector.option.deleteButton
+]);
+
+addChild(document.body, [UI.listBlock.container]);
+
+getStorage();

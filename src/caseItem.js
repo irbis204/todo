@@ -1,73 +1,92 @@
-import {UI} from "./UI";
-import {Application} from "./Application";
-import {createElement} from "./function";
+import {UI} from './UI';
+import {addChild, createElement, handleDrop, preventDefaults} from './function';
 
-let caseItem = {
-  text: "",
-  HTMLItem: 0,
-  imageURLs: [],
-  date: 0,
-  show() {
-    UI.caseItem.titel.textContent = this.text;
-    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(event => {
-      UI.caseItem.dropImage.container.addEventListener(event, preventDefaults, false);
-    });
+// text - название категории
+// HTMLItem - содержит HTML соответствующей категории
+// imageURLs - массив названий изображений
+// date - дата создания задания
+// add() - добавляет новый элемент в массив
+// showCase() - отображает кейс
+// delete() - удаляет кейс
+// showCategoryCases() - отображает все кейсы заданной категории
 
-    UI.caseItem.dropImage.container.addEventListener('drop', (e)=>{
-      handleDrop(e);
-    }, false);
+/**
+ * @param caseItem
+ * @constructor
+ */
+export function Case(caseItem) {
+  this.title = caseItem.title;
+  this.text = caseItem.text || "";
+  this.HTMLItem = caseItem.HTMLItem ;
+  this.imageURLs = caseItem.imageURLs ? caseItem.imageURLs : [];
+  this.date = caseItem.date ? caseItem.date : new Date().getTime();
+  this.counts = caseItem.counts;
+}
+
+/**
+ * Getter получает необходимую информацию из объекта для записи
+ */
+Object.defineProperty(Case.prototype, 'data', {
+  get () {
+    return {
+      title: this.title,
+      text: this.text,
+      imageURLs: this.imageURLs,
+      date: this.date,
+    }
   },
+})
+
+/**
+ * Setter позволяет изменив свойство textData поменять текст в самом обьекте и в HTML элементе, его отражающем
+ */
+Object.defineProperty(Case.prototype, 'textData', {
+  set ({title, text}) {
+    this.HTMLItem.textBlock.title.text = title;
+    this.HTMLItem.textBlock.text.text = text;
+    this.title = title;
+    this.text = text;
+  }
+});
+
+/**
+ * Выводит всю информацию о кейсе
+ */
+Case.prototype.show = function() {
+  UI.listBlock.caseItem.title.textContent = this.title;
+
+  ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(event => {
+    UI.listBlock.caseItem.dropImage.container.addEventListener(event, preventDefaults, false);
+  });
+  UI.listBlock.caseItem.dropImage.container.addEventListener('drop', handleDrop, false);
+
+  UI.listBlock.caseItem.title.text =  this.title;
+  UI.listBlock.caseItem.text.text = this.text;
+
+  UI.clearBlock(UI.listBlock.caseItem.container);
+
+  this.uploadGalery();
+
+  addChild(UI.listBlock.caseItem.container, [
+    UI.listBlock.caseItem.title,
+    UI.listBlock.caseItem.text,
+    UI.listBlock.caseItem.dropImage.container,
+    UI.listBlock.caseItem.gallery,
+  ]);
 };
 
-export function newCase(caseItem) {
-  this.text = caseItem.text;
-  this.HTMLItem = caseItem.HTMLItem;
-  this.imageURLs = [];
-  this.date = caseItem.date;
-
-  return this;
-}
-
-newCase.prototype = caseItem;
-
-
-function preventDefaults (e) {
-  e.preventDefault();
-  e.stopPropagation();
-}
-
-function handleFiles(files){
-  [...files].forEach((file) => uploadFile(file, (image) => {
+/**
+ * Загружает фото в галерею
+ */
+Case.prototype.uploadGalery = function() {
+  UI.clearBlock(UI.listBlock.caseItem.gallery)
+  this.imageURLs.forEach((item) => {
     const elementImage = createElement({type: 'div'});
-    elementImage.setAttribute('style', `background:url('${image}') no-repeat center;`);
+    elementImage.setAttribute('style', `background:url('${item}') no-repeat center; background-size: cover`);
     elementImage.classList.add('image');
-    UI.caseItem.galery.appendChild(elementImage);
-    console.log(Application.selectedCase);
-    Application.selectedCase.imageURLs.push(image);
-  }));
-
-}
-
-function uploadFile(file, callback){
-  let url = './upload.php';
-  let formData = new FormData();
-  let imagePath;
-
-  formData.append('file', file);
-  fetch(url, {
-    method: 'POST',
-    body: formData
+    UI.listBlock.caseItem.gallery.appendChild(elementImage);
   })
-    .then(async function(response){
-      callback(await response.text());
-    });
+};
 
-  return imagePath;
-}
 
-function handleDrop(e) {
-  let dataTransfer = e.dataTransfer;
-  let files = dataTransfer.files;
 
-  handleFiles(files);
-}

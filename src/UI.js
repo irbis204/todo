@@ -1,203 +1,276 @@
-import { addChild, createElement } from "./function";
-import {Application} from "./Application";
-import {category} from "./category";
+import { addChild, createElement, changeText } from './function';
+import {Application} from './Application';
+import {Category} from './category';
+
+// UI - элемент содержащий html приложения
+// listOfCategories -  соответсвует блоку listOfCases содержащему кейсы и элементы для работы с ними
+// container в нултри обьекта всегда означает родительский блок в который добавляются дочернии, созданные внутри обьекта
+// addOption, searchOption, sortButton - кнопки для открытия соответствующего функционального блока
+// option - обьект функционального блока
+// changeTextBlock - блок для изменения текста
+// list - блок для отображения массива элементов
+// caseItem - блок для развернутого отображения кейса
+// clearBlock() - очищает блок от потомков
+// sort()- сортирует массив и отображает его отсортированную версию
+// renderCases() - отображает отсортированный массив
+
 
 export let UI = {
-  listOfCategories: {
-    container: createElement({ type: "div", className: ['listOfCategories']}),
-    optionBlock: {
-      container: createElement({ type: "div" }),
-      addOption: createElement({ type: "button", className: ["button", "button-add"], text:"+"}),
-      addOptionBox: createElement({ type: "div", className: ["optionBox"] }),
-      searchOption: createElement({ type: "button", className: ["button", "button-search"]}),
-      searchOptionBox: createElement({ type: "div",  className: ["optionBox"] }),
-      sortOptionBox: createElement({ type: "div",  className: ["optionBox"] }),
-      sortButton: createElement({
-        type: "button",
-        className: ["button", "button-sort"],
-        text: "\u21F5",
-      }),
-      option: {
-        container: createElement({ type: "div", className: ["option", "hide"]}),
-        input: createElement({type: "input", className: ["input"]}),
-        addButton: createElement({
-          type: "button",
-          className: ["button", "button-add", "hide"],
-          text: "+",
-        }),
-        searchButton: createElement({
-          type: "button",
-          className: ["button", "button-search", "hide"],
-        }),
+  listBlock: {
+    container: createElement({type: 'div', className: ['list-block']}),
+    listOfCategories: {
+      container: createElement({type: 'div', className: ['list-of-categories']}),
+      optionBlock: {
+        container: createElement({type: 'div', className: ['list-of-categories-option']}),
+        searchBlock: {
+          container: createElement({type: 'div', className: ['search-block']}),
+          input: createElement({type: 'input', className: ['input', 'input-search']}),
+          button: createElement({ type: 'button', className: ['button', 'button-search']}),
+          closeSearch: createElement({ type: 'button', className: ['button-close-search'], text: 'Close search'}),
+        },
+        sortButton: createElement({type: 'button', className: ['button', 'button-category', 'button-sort'], text: '\u296E',}),
       },
-      changeTextBlock: {
-        container: createElement({ type: "div", className: ["changeBlock"] }),
-        input: createElement({type: "input", className: ["input", "input-change"]}),
-        button: createElement({type: "button", className: ["button-category-close"], text: "\u2713"}),
+      content: {
+        container: createElement({type: 'div', className: ['list-of-categories-content']}),
+        countCategories: createElement({type: 'p', className: ['counter']}),
+        list: createElement({type: 'div', className: ['list']}),
+        addButton: createElement({type: 'button', className: ['button', 'button-category'], text: '+'}),
       },
     },
-    list: createElement({ type: "div" }),
-    selectedCategory: 0,
-  },
-  listOfCases: {
-    container: createElement({ type: "div", className: ['listOfCases']}),
-    optionBlock: {
-      container: createElement({ type: "div" }),
-      addOption: createElement({ type: "button", className: ["button", "button-add"], text:"+"}),
-      addOptionBox: createElement({ type: "div", className: ["optionBox"] }),
-      searchOption: createElement({ type: "button", className: ["button", "button-search"]}),
-      searchOptionBox: createElement({ type: "div",  className: ["optionBox"] }),
-      sortButton: createElement({
-        type: "button",
-        className: ["button", "button-sort"],
-        text: "\u21F5",
-      }),
-      option: {
-        container: createElement({ type: "div", className: ["option", "hide"]}),
-        input: createElement({type: "input", className: ["input"]}),
-        addButton: createElement({
-          type: "button",
-          className: ["button", "button-add", "hide"],
-          text: "+",
-        }),
-        searchButton: createElement({
-          type: "button",
-          className: ["button", "button-search", "hide"],
-        }),
-        sortByTextButton: createElement({
-          type: "button",
-          className: ["button", "button-sort", "button-sortBy", "hide"],
-          text: "Sort by text",
-        }),
-        sortByDateButton: createElement({
-          type: "button",
-          className: ["button", "button-sort", "button-sortBy", "hide"],
-          text: "Sort by date",
-        }),
+    listOfCases: {
+      container: createElement({type: 'div', className: ['list-of-cases']}),
+      optionBlock: {
+        container: createElement({type: 'div', className: ['sort-category', 'hide']}),
+        sortByTextButton: createElement({type: 'button', className: ['button', 'button-case', 'button-sort-by', 'button-sort-by-text'], text: 'Sort by text'}),
+        sortByDateButton: createElement({type: 'button', className: ['button', 'button-case', 'button-sort-by', 'button-sort-by-date'], text: 'Sort by date'}),
       },
-      changeTextBlock: {
-        container: createElement({ type: "div", className: ["changeBlock"] }),
-        input: createElement({type: "input", className: ["input", "input-change"]}),
-        button: createElement({type: "button", className: ["button-category-close"], text: "\u2713"}),
+      content: {
+        container: createElement({type: 'div', className: ['list-of-case-content']}),
+        countCases: createElement({type: 'p', className: ['counter']}),
+        list: createElement({type: 'div', className: ['list']}),
+        addButton: createElement({type: 'button', className: ['button', 'button-case'], text: '+'}),
       },
     },
-    list: createElement({ type: "div" }),
-    selectedCase: 0,
-  },
-  caseItem: {
-    container: createElement({ type: "div", className: ['caseItem'] }),
-    titel: createElement({ type: "h3" }),
-    text: createElement({ type: "h2" }),
-    dropImage: {
-      container: createElement({type: 'div', text: "drop to me"}),
-      input: createElement({type: 'input', className: ['hide']}),
+    caseItem: {
+      container: createElement({type: 'div', className: ['case-item']}),
+      title: createElement({type: 'h3', className: ['title']}),
+      text: createElement({type: 'div'}),
+      dropImage: {
+        container: createElement({type: 'div', className: ['dragNDrop'], text: 'Drop me image'}),
+        input: createElement({type: 'input', className: ['hide']}),
+      },
+      gallery: createElement({type: 'div'}),
     },
-    galery: createElement({ type: "div" }),
   },
-
-  clearBlock(block) {
-    let size = block.children.length;
-
-    for(let i=0; i < size; i++){
-      block.children[0].remove();
-    }
+  categorySelector: {
+    container: createElement({type: 'div', className: ['category-body', 'category-body-selector']}),
+    option: {
+      container: createElement({type: 'div', className: ['selector-option']}),
+      renameButton: createElement({type: 'button', className: ['button-selector', 'hide'], text: 'Rename'}),
+      deleteButton:createElement({type: 'button', className: ['button-selector', 'hide'], text: 'Delete'}),
+    },
   },
+  caseSelector: {
+    container: createElement({type: 'div', className: ['case-body', 'case-body-selector']}),
+    option: {
+      container: createElement({type: 'div', className: ['selector-option']}),
+      renameButton: createElement({type: 'button', className: ['button-selector', 'hide'], text: 'Rename'}),
+      deleteButton:createElement({type: 'button', className: ['button-selector', 'hide'], text: 'Delete'}),
+    },
+  },
+  popUp: {
+    container: createElement({type: 'div', className: ['pop-up-background']}),
+    form: createElement({type: 'div', className: ['pop-up']}),
+    title: createElement({type: 'h3', className: ['pop-up-title'], text: 'Add new'}),
+    body: {
+      container: createElement({type: 'div', className: ['pop-up-body']}),
+      inputName: createElement({type: 'input', className: ['input', 'input-add']}),
+      inputText: createElement({type: 'textarea', className: ['pop-up-textarea']}),
+      button: createElement({type: 'button', className: ['button', 'button-case'], text: '\u2713'}),
+    },
+    closeButton: createElement({type: 'button', className: ['button-close'], text: 'x'}),
 
-  sort(key, object){
-    let property = object.cases !== undefined ? "cases" : "categories";
-    //let property = object.hasOwnProperty("cases") === true ? "cases" : "categories";
-    let arrayCopy = object[property].slice();
+    /**
+     * Открывае всплывающую форму
+     * @param {string} key
+     */
+    open(key) {
+      this.body.inputText.value = '';
+      this.body.inputName.value = '';
 
+      if (key === 'new category') {
 
-    arrayCopy.sort((itemOne, itemTwo) => {
-      if (itemOne[key] > itemTwo[key]){
-        return 1 * object.sorted;
+        this.title.text = 'Add a new category';
+        this.body.inputText.classList.add('hide');
+        this.body.button.onclick = () => Application.add();
+      } else if (key === 'new case') {
+
+        this.title.text = 'Add a new case';
+        this.body.inputText.classList.remove('hide');
+
+        this.body.button.onclick = () => {
+          Application.state.selectedCategory.add();
+          Application.state.selectedCategory.showCategoryCases();
+        }
+      } else if (key === 'change category') {
+
+        this.title.text = 'Change category name';
+        this.body.inputText.classList.add('hide');
+        this.body.button.onclick = () => changeText(Application.state.selectedCategory, 'Category');
+      } else if (key === 'change case') {
+
+        this.title.text = 'Change case name';
+        this.body.inputText.classList.remove('hide');
+        this.body.button.onclick = () => changeText(Application.state.selectedCase, 'Case');
       }
 
-      if (itemOne[key] === itemTwo[key]){
+      addChild(document.body, [
+        UI.popUp.container
+      ]);
+    },
+
+    /**
+     * Закрывает всплывающую форму
+     */
+    close() {
+      document.body.removeChild(this.container);
+    },
+  },
+
+  /**
+   * Добавляет анимацию селектору
+   * @param {{
+   * container: HTMLDivElement
+   * option}} selector
+   * @param {string} key
+   */
+  toggleSelector(selector, key) {
+    if(!selector.container.classList.contains(`${key}-body-selector-open`) && !selector.container.classList.contains(`${key}-body-selector-close`)) {
+      selector.container.classList.add(`${key}-body-selector-open`);
+      selector.container.classList.remove(`${key}-body-selector-active`);
+    } else {
+      selector.container.classList.toggle(`${key}-body-selector-open`);
+      selector.container.classList.toggle(`${key}-body-selector-close`);
+    }
+
+    if(selector.container.classList.contains(`${key}-body-selector-close`)) {
+      let remove = selector.container.classList.remove.bind(selector.container.classList);
+      setTimeout(remove, 500, `${key}-body-selector-close`)
+    }
+
+    selector.option.deleteButton.classList.toggle('hide');
+    selector.option.renameButton.classList.toggle('hide');
+  },
+
+  /**
+   * Очищает блок от потомков
+   * @param {HTMLInputElement | HTMLDivElement | HTMLHeadElement | HTMLButtonElement} block
+   */
+  clearBlock(block) {
+    block.innerHTML = '';
+  },
+
+  /**
+   * Сортирует категории\кейсы
+   * @param {string} property
+   * @param {Application | Category} sortedObject
+   * @returns {number}
+   */
+  sort(property, sortedObject){
+    let key = sortedObject.cases ? 'cases' : 'categories';
+    let arrayCopy = sortedObject[key].slice();
+    let direction = sortedObject.state.sorted ? 1 : -1;
+
+    arrayCopy.sort((itemOne, itemTwo) => {
+      if (itemOne[property] > itemTwo[property]){
+        return 1 * direction;
+      }
+
+      if (itemOne[property] === itemTwo[property]){
         return 0;
       }
 
-      if (itemOne[key] < itemTwo[key]){
-        return -1 * object.sorted;
+      if (itemOne[property] < itemTwo[property]){
+        return -1 * direction;
       }
     });
 
-    object.sorted = object.sorted === 1 ? -1 : 1;
-    UI.renderCases(arrayCopy, property);
-
+    sortedObject.state.sorted = !sortedObject.state.sorted;
+    UI.renderCases(arrayCopy, key);
 
     return 0;
   },
 
+  /**
+   * Отображает отсортированный массив категорий/кейсов
+   * @param {[]} array
+   * @param {string} property
+   */
   renderCases(array, property) {
-    property = "C" + property.slice(1);
+    property = `C${property.slice(1)}`;
 
     array.forEach((item) => {
-      UI[`listOf${property}`].list.removeChild(item.HTMLItem);
-      UI[`listOf${property}`].list.appendChild(item.HTMLItem);
+      UI.listBlock[`listOf${property}`].content.list.removeChild(item.HTMLItem.container);
+      UI.listBlock[`listOf${property}`].content.list.appendChild(item.HTMLItem.container);
     })
   },
+
+  /**
+   * Отменяет срытие элементов не удовлетворяющих поиску
+   */
+  closeSearch(){
+    Application.state.searchingByCategory = false;
+
+    UI.listBlock.listOfCategories.optionBlock.searchBlock.closeSearch.remove();
+
+    Application.categories.forEach((category) => {
+      category.HTMLItem.container.classList.remove('hide');
+
+      category.cases.forEach((verifiableCase) => {
+        verifiableCase.HTMLItem.container.classList.remove('hide');
+      });
+    });
+  },
+
+  /**
+   * Обновляет значения каунтера
+   * @param {string} key
+   */
+  updateCounter(key) {
+    UI.listBlock[`listOf${key}`].content[`count${key}`].text = Application.state[`count${key}`] + ' c' + key.slice(1);
+  }
 };
 
-UI.listOfCategories.optionBlock.addOption.onclick = () => {
-  UI.listOfCategories.optionBlock.option.container.className = "option"
-  UI.listOfCategories.optionBlock.option.addButton.classList.remove("hide");
-  UI.listOfCategories.optionBlock.option.searchButton.classList.add("hide");
+UI.listBlock.listOfCases.optionBlock.sortByTextButton.onclick = () => {
+  UI.sort('title', Application.state.selectedCategory);
 };
 
-UI.listOfCategories.optionBlock.searchOption.onclick = () => {
-  UI.listOfCategories.optionBlock.option.container.className = "option"
-  UI.listOfCategories.optionBlock.option.searchButton.classList.remove("hide");
-  UI.listOfCategories.optionBlock.option.addButton.classList.add("hide");
-
+UI.listBlock.listOfCases.optionBlock.sortByDateButton.onclick = () => {
+  UI.sort('date', Application.state.selectedCategory);
 };
 
-UI.listOfCategories.optionBlock.sortButton.onclick = () => {
-  UI.listOfCategories.optionBlock.option.container.classList.add("hide");
+UI.listBlock.listOfCategories.optionBlock.sortButton.onclick = () => {
+  UI.sort('title', Application);
 };
 
-UI.listOfCases.optionBlock.addOption.onclick = () => {
-  UI.listOfCases.optionBlock.option.container.className = "option"
-  UI.listOfCases.optionBlock.option.addButton.classList.remove("hide");
-  UI.listOfCases.optionBlock.option.searchButton.classList.add("hide");
-  UI.listOfCases.optionBlock.option.sortByTextButton.classList.add("hide");
-  UI.listOfCases.optionBlock.option.sortByDateButton.classList.add("hide");
-  UI.listOfCases.optionBlock.option.input.classList.remove("hide");
+UI.listBlock.listOfCategories.optionBlock.searchBlock.button.onclick = () =>{
+  Application.find(UI.listBlock.listOfCategories.optionBlock.searchBlock.input.value);
 };
 
-UI.listOfCases.optionBlock.searchOption.onclick = () => {
-  UI.listOfCases.optionBlock.option.container.className = "option"
-  UI.listOfCases.optionBlock.option.searchButton.classList.remove("hide");
-  UI.listOfCases.optionBlock.option.addButton.classList.add("hide");
-  UI.listOfCases.optionBlock.option.sortByTextButton.classList.add("hide");
-  UI.listOfCases.optionBlock.option.sortByDateButton.classList.add("hide");
-  UI.listOfCases.optionBlock.option.input.classList.remove("hide");
-};
+UI.listBlock.listOfCases.content.addButton.onclick = () => UI.popUp.open('new case');
 
-UI.listOfCases.optionBlock.sortButton.onclick = () => {
-  UI.listOfCases.optionBlock.option.container.classList.add("hide");
-};
-UI.listOfCategories.optionBlock.option.addButton.onclick = () => Application.add();
-UI.listOfCases.optionBlock.option.addButton.onclick = () => category.add();
+UI.listBlock.listOfCategories.content.addButton.onclick = () => UI.popUp.open('new category');
 
-UI.listOfCases.optionBlock.sortButton.onclick = () => {
-  UI.listOfCases.optionBlock.option.container.className = "option"
-  UI.listOfCases.optionBlock.option.input.classList.add("hide");
-  UI.listOfCases.optionBlock.option.addButton.classList.add("hide");
-  UI.listOfCases.optionBlock.option.searchButton.classList.add("hide");
-  UI.listOfCases.optionBlock.option.sortByTextButton.classList.remove("hide");
-  UI.listOfCases.optionBlock.option.sortByDateButton.classList.remove("hide");
-};
+UI.popUp.closeButton.onclick = () => UI.popUp.close();
 
-UI.listOfCases.optionBlock.option.sortByTextButton.onclick = () => {
-  UI.sort("text", Application.selectedCategory);
-};
+UI.categorySelector.container.onclick = () => UI.toggleSelector(UI.categorySelector, 'category');
 
-UI.listOfCases.optionBlock.option.sortByDateButton.onclick = () => {
-  UI.sort("date", Application.selectedCategory);
-};
+UI.caseSelector.container.onclick = () => UI.toggleSelector(UI.caseSelector, 'case');
 
-UI.listOfCategories.optionBlock.sortButton.onclick = () => {
-  UI.sort("text", Application);
-};
+UI.listBlock.listOfCategories.optionBlock.sortButton.onclick = () => UI.sort('title', Application)
+
+UI.listBlock.listOfCases.optionBlock.sortByTextButton.onclick = () => UI.sort('title', Application.state.selectedCategory);
+
+UI.listBlock.listOfCases.optionBlock.sortByDateButton.onclick = () => UI.sort('date', Application.state.selectedCategory);
+
+UI.listBlock.listOfCategories.optionBlock.searchBlock.closeSearch.onclick = () => UI.closeSearch();
